@@ -1,0 +1,27 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { publishedArticles } from '../../lib/articles';
+export async function getStaticPaths() {
+  return (await publishedArticles()).map(article => ({ params: { slug: article.data.slug }, props: { article } }));
+}
+const { article } = Astro.props;
+const { Content, headings } = await render(article);
+const toc = headings.filter(heading => heading.depth === 2 || heading.depth === 3);
+---
+<Base title={article.data.title} description={article.data.description} lang={article.data.lang}>
+  <main id="main" class="wrap article-main">
+    <a class="back-link" href="/">← All writing / 全部文章</a>
+    <header class="article-header">
+      <div class="metadata"><span class="category">{article.data.category}</span><time datetime={article.data.date}>{article.data.date}</time></div>
+      <h1>{article.data.title}</h1>
+      <p class="article-description">{article.data.description}</p>
+      <ul class="tags" aria-label="Tags">{article.data.tags.map(tag => <li>{tag}</li>)}</ul>
+    </header>
+    <div class:list={['reading-layout', { 'has-toc': toc.length >= 3 }]}>
+      {toc.length >= 3 && <aside class="toc"><nav aria-label="Table of contents"><p class="eyebrow">ON THIS PAGE / 目录</p><ol>{toc.map(heading => <li class:list={{ nested: heading.depth === 3 }}><a href={`#${heading.slug}`}>{heading.text}</a></li>)}</ol></nav></aside>}
+      <article class="prose"><Content /></article>
+    </div>
+    <div class="article-end"><span>End of article / 全文完</span><a href="/">Back to the collection ↑</a></div>
+  </main>
+</Base>

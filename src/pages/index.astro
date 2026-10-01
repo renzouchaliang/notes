@@ -1,0 +1,30 @@
+---
+import Base from '../layouts/Base.astro';
+import { publishedArticles } from '../lib/articles';
+const articles = await publishedArticles();
+---
+<Base title="Writing & research" description="Notes, reports, and research. 笔记、报告与研究资料。">
+  <main id="main" class="wrap">
+    <section class="intro">
+      <p class="eyebrow">A PERSONAL PUBLICATION / 个人文集</p>
+      <h1>Ideas, collected.<br /><span>思考，落在纸上。</span></h1>
+      <p class="intro-description">Notes, reports, and things worth keeping.<br />记录探索，整理研究，分享值得留下的想法。</p>
+    </section>
+    <section class="archive" aria-labelledby="archive-heading">
+      <div class="section-heading"><h2 id="archive-heading">The collection <span>/ 文章</span></h2><span>{String(articles.length).padStart(2, '0')} articles</span></div>
+      {articles.length === 0 ? <p class="empty">New writing is on its way. 新文章即将发布。</p> :
+        <ol class="article-list">{articles.map((article, index) => (
+          <li class="article-row">
+            <span class="article-number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+            <div class="article-summary">
+              <div class="metadata"><span class="category">{article.data.category}</span><time datetime={article.data.date}>{article.data.date}</time></div>
+              <h3><a href={`/articles/${article.data.slug}/`}>{article.data.title}</a></h3>
+              <p>{article.data.description}</p>
+              <ul class="tags" aria-label="Tags">{article.data.tags.map(tag => <li>{tag}</li>)}</ul>
+            </div>
+            <a class="read-arrow" href={`/articles/${article.data.slug}/`} aria-label={`Read ${article.data.title}`}>↗</a>
+          </li>
+        ))}</ol>}
+    </section>
+  </main>
+</Base>
