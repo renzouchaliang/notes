@@ -74,11 +74,13 @@ Markdown may contain raw HTML; publish trusted content only. Do not put secrets 
 - Typography, layout, and colors: `src/styles/global.css`
 - Frontmatter validation: `src/content.config.ts`
 
-The site works on a root domain or subdomain. If you later choose a production domain, you can add `site: 'https://your-domain.example'` to `astro.config.mjs` for future canonical URL or sitemap features.
+The canonical public site URL is **https://notes.renzouchaliang.workers.dev/**, configured as `site` in `astro.config.mjs`. Published articles use `https://notes.renzouchaliang.workers.dev/articles/<slug>/`; for example, [Test Note](https://notes.renzouchaliang.workers.dev/articles/test-note/). Keep this configuration and the publishing rules in `AGENTS.md` aligned if the domain changes.
 
 ## Deploy on Cloudflare Pages
 
-In Cloudflare, create a **Pages** project and connect this Git repository:
+The current public address uses Cloudflare Workers (`workers.dev`). The static build can also be deployed to Cloudflare Pages using the settings below. These Pages instructions describe an alternative deployment target; they do not change the canonical public URL.
+
+To deploy on Pages, create a **Pages** project and connect this Git repository:
 
 | Setting | Value |
 | --- | --- |
@@ -91,4 +93,4 @@ In Cloudflare, create a **Pages** project and connect this Git repository:
 
 The committed npm lockfile makes installs reproducible. Cloudflare Pages installs dependencies before building. This is static output: no adapter, Workers runtime, database, credentials, or application environment variables are needed. `public/_headers` is copied into the output for Pages response headers. `404.html` provides the custom not-found page. Pages supplies HTTPS and a `pages.dev` domain; add a custom domain in its settings if desired.
 
-Deployment is prepared but must be connected/published in your Cloudflare account. After deployment, verify the homepage, an article, an image, and a nonexistent URL. Future pushes rebuild the site. If a published URL must change, add a permanent redirect in `public/_redirects`, preserving the old address for existing readers.
+Connect the Git repository in your Cloudflare project to enable automatic builds on pushes to `main`. After deployment, verify the homepage, an article, an image, and a nonexistent URL. A successful local build or Git push alone does not confirm a live deployment. If a published URL must change, add a permanent redirect in `public/_redirects`, preserving the old address for existing readers.

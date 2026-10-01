@@ -21,6 +21,9 @@
 
 ## Validation and deployment
 
+- The canonical public site URL is `https://notes.renzouchaliang.workers.dev/`, also configured as `site` in `astro.config.mjs`. Use it for future publishing tasks unless the user explicitly changes the domain.
+- Final article URLs follow `https://notes.renzouchaliang.workers.dev/articles/<slug>/`. After publishing, return the full public URL and verify it when network access permits; clearly distinguish a pushed commit from a verified live deployment.
+
 - Do not commit `node_modules/`, `.astro/`, `dist/`, or credentials.
 - Update README instructions when changing publishing or deployment behavior.
 - Keep automated checks content-independent so removing sample articles does not break the test suite.
